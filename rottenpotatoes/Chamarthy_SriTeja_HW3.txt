@@ -36,7 +36,7 @@ Feature: display list of movies filtered by MPAA rating
     And I should not see "2001: A Space Odyssey"        # features/step_definitions/web_steps.rb:123
     And I should not see "Chicken Run"                  # features/step_definitions/web_steps.rb:123
 
-  Scenario: all ratings selected                        # features/filter_movie_list.feature:41
+  Scenario: all ratings selected                        # features/filter_movie_list.feature:42
     When I check the following ratings: PG, G, PG-13, R # features/step_definitions/movie_steps.rb:34
     And I press "Refresh"                               # features/step_definitions/web_steps.rb:52
     Then I should see all the movies                    # features/step_definitions/movie_steps.rb:47
@@ -62,18 +62,18 @@ Feature: display list of movies sorted by different criteria
     And I am on the RottenPotatoes home page     # features/step_definitions/web_steps.rb:44
     Then 10 seed movies should exist             # features/step_definitions/movie_steps.rb:11
 
-  Scenario: sort movies alphabetically                # features/sort_movie_list.feature:25
-    When I follow "Movie Title"                       # features/step_definitions/web_steps.rb:56
-    Then I should see "Aladdin" before "Amelie"       # features/step_definitions/movie_steps.rb:23
-    Then I should see "Chicken Run" before "Chocolat" # features/step_definitions/movie_steps.rb:23
+  Scenario: sort movies alphabetically                         # features/sort_movie_list.feature:25
+    When I follow "Movie Title"                                # features/step_definitions/web_steps.rb:56
+    Then I should see "Aladdin" before "Amelie"                # features/step_definitions/movie_steps.rb:23
+    Then I should see "Chicken Run" before "Chocolat"          # features/step_definitions/movie_steps.rb:23
+    Then I should see "2001: A Space Odyssey" before "Aladdin" # features/step_definitions/movie_steps.rb:23
 
-  # your steps here
-  Scenario: sort movies in increasing order of release date # features/sort_movie_list.feature:31
-    When I follow "Release Date"                            # features/step_definitions/web_steps.rb:56
-    Then I should see "Aladdin" before "Amelie"             # features/step_definitions/movie_steps.rb:23
-    Then I should see "Chicken Run" before "Chocolat"       # features/step_definitions/movie_steps.rb:23
-# your steps here
+  Scenario: sort movies in increasing order of release date    # features/sort_movie_list.feature:31
+    When I follow "Release Date"                               # features/step_definitions/web_steps.rb:56
+    Then I should see "Aladdin" before "Amelie"                # features/step_definitions/movie_steps.rb:23
+    Then I should see "Chicken Run" before "Chocolat"          # features/step_definitions/movie_steps.rb:23
+    Then I should see "2001: A Space Odyssey" before "Aladdin" # features/step_definitions/movie_steps.rb:23
 
 4 scenarios (4 passed)
-35 steps (35 passed)
-0m0.400s
+37 steps (37 passed)
+0m0.617s

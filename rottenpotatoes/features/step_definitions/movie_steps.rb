@@ -13,9 +13,9 @@ Then /(.*) seed movies should exist/ do | n_seeds |
 end
 
 Then /I should see (\d+) movies$/ do |movie_count|
-  $ui_table = page.body
-  $ui_row_count = $ui_table.scan(/<tr>/).length - 1
-  $ui_row_count.should be movie_count.to_i
+  ui_table = page.body
+  ui_row_count = ui_table.scan(/<tr>/).length - 1
+  ui_row_count.should be movie_count.to_i
 end
 # Make sure that one string (regexp) occurs before or after another one
 #   on the same page
@@ -23,8 +23,8 @@ end
 Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
   #  ensure that that e1 occurs before e2.
   #  page.body is the entire content of the page as a string.
-  $ui_table = page.body
-  ($ui_table.index(e1.to_s) < $ui_table.index(e2.to_s)).should be true
+  ui_table = page.body
+  (ui_table.index(e1.to_s) < ui_table.index(e2.to_s)).should be true
 end
 
 # Make it easier to express checking or unchecking several boxes at once
@@ -46,7 +46,7 @@ end
 
 Then /I should see all the movies/ do
   # Make sure that all the movies in the app are visible in the table
-  $ui_table = page.body
-  $ui_movie_count = $ui_table.scan(/<tr>/).length - 1
-  $ui_movie_count.should be Movie.count
+  ui_table = page.body
+  ui_movie_count = ui_table.scan(/<tr>/).length - 1
+  ui_movie_count.should be Movie.count
 end
