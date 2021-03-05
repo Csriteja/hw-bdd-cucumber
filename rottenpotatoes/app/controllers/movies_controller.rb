@@ -7,26 +7,65 @@ class MoviesController < ApplicationController
   end
 
   def index
-    sort = params[:sort] || session[:sort]
-    case sort
-    when 'title'
-      ordering,@title_header = {:title => :asc}, 'bg-warning hilite'
-    when 'release_date'
-      ordering,@date_header = {:release_date => :asc}, 'bg-warning hilite'
+    
+    if request.env['PATH_INFO'] == '/'
+      session.clear
     end
+    
+    redirect_flag = 0
+    @ratings_to_show = []
+    @default_ratings = nil
     @all_ratings = Movie.all_ratings
-    @selected_ratings = params[:ratings] || session[:ratings] || {}
-
-    if @selected_ratings == {}
-      @selected_ratings = Hash[@all_ratings.map {|rating| [rating, rating]}]
+    if params[:button_clicked]
+      session[:ratings]=params[:ratings]
+      if params[:ratings].nil? && params[:sort].nil?
+        session[:sort]=nil
+      end
     end
-
-    if params[:sort] != session[:sort] or params[:ratings] != session[:ratings]
-      session[:sort] = sort
-      session[:ratings] = @selected_ratings
-      redirect_to :sort => sort, :ratings => @selected_ratings and return
+    
+    if params[:sort]
+      @sort_by = params[:sort]
+      session[:sort] = @sort_by
+    elsif session[:sort]
+      @sort_by = session[:sort]
+      redirect_flag = 1
+    else
+      @sort_by = nil
     end
-    @movies = Movie.where(rating: @selected_ratings.keys).order(ordering)
+    
+    if params[:ratings]
+      @ratings = params[:ratings]
+      session[:ratings] = @ratings
+    elsif session[:ratings]
+      @ratings = session[:ratings]
+      redirect_flag = 1
+    else
+      @ratings = nil
+    end
+    
+    if @ratings.nil?
+      @default_ratings = Hash.new
+      @all_ratings.each do |rating|
+        @default_ratings[rating] = 1
+      end
+    else
+      @ratings_to_show = (@ratings == @default_ratings) ? [] : @ratings.keys
+    end
+    
+    if redirect_flag == 1
+      flash.keep
+      redirect_to movies_path :sort => @sort_by, :ratings => @ratings
+    end
+    
+    if @ratings && @sort_by
+      @movies = Movie.get_sorted_ratings(@ratings.keys, @sort_by)
+    elsif @ratings
+      @movies = Movie.get_ratings(@ratings.keys)
+    elsif @sort_by
+      @movies = Movie.all.order(@sort_by)
+    else
+      @movies = Movie.all
+    end
   end
 
   def new
